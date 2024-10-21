@@ -9,3 +9,10 @@ express()
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+app.post('/posts', (req, res) => {
+  const { title, content } = req.body;
+  if (!title || !content) {
+    return res.status(400).send('Title and content are required');
+  }
+  res.status(201).send({ message: 'Post created', post: { title, content } });
+});
