@@ -1,14 +1,20 @@
-const express = require('express')
-const path = require('path')
+const express = require('express');
+const path = require('path');
 
-const PORT = process.env.PORT || 5001
+const app = express();  // Инициализираме приложението
+const PORT = process.env.PORT || 5001;
 
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+// Middleware за обработка на JSON заявки
+app.use(express.json());
+
+app.use(express.static(path.join(__dirname, 'public')))
+   .set('views', path.join(__dirname, 'views'))
+   .set('view engine', 'ejs');
+
+// Главна страница
+app.get('/', (req, res) => res.render('pages/index'));
+
+// API за постове
 app.post('/posts', (req, res) => {
   const { title, content } = req.body;
   if (!title || !content) {
@@ -16,3 +22,6 @@ app.post('/posts', (req, res) => {
   }
   res.status(201).send({ message: 'Post created', post: { title, content } });
 });
+
+// Запускане на сървъра
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));
