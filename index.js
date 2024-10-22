@@ -38,3 +38,36 @@ app.post('/posts', (req, res) => {
 
 // Запускане на сървъра
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+const express = require('express');
+const mysql = require('mysql');  // Импорт на MySQL библиотеката
+const app = express();
+const PORT = process.env.PORT || 5001;
+
+// Свързване с базата данни MySQL
+const db = mysql.createConnection({
+  host: 'localhost',   // Ако базата данни е на същия сървър, използвай localhost
+  user: 'radilovk_bot',  // Твоето потребителско име за базата данни
+  password: 'Legion69.#',  // Твоята парола за базата данни
+  database: 'radilovk_Diets'  // Името на базата данни
+});
+
+// Свързване към базата данни
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err.stack);
+    return;
+  }
+  console.log('Connected to MySQL');
+});
+
+app.use(express.json());  // Middleware за JSON данни
+
+// Примерен маршрут за тестване на връзката
+app.get('/test', (req, res) => {
+  res.send('MySQL connection is working!');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
